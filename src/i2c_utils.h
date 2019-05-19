@@ -6,8 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define I2C_TOOLS_USE_SW_I2C
-
 #ifdef I2C_TOOLS_USE_SW_I2C
     #include "SoftwareI2C.h"
 #endif
