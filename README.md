@@ -32,4 +32,4 @@ i2c-tools 包含了一些很方便对 i2c 设备进行调试的小工具。
 
 * 维护：Wu Han
 * 主页：http://wuhanstudio.cc
-* 邮箱：wuhanstudio@hust.edu.cn
+* 联系：https://github.com/wuhanstudio/rt-i2c-tools/issues
