@@ -131,7 +131,7 @@ rt_uint8_t i2c_read(rt_uint8_t addr, rt_uint8_t reg, rt_uint8_t* buffer, rt_uint
 
 void i2c_scan(rt_uint8_t start_addr, rt_uint8_t stop_addr)
 {
-    rt_kputs("    00 01  2 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F");
+    rt_kputs("    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F");
     rt_uint8_t pos = start_addr & 0xF;
     for(; pos < stop_addr; pos++)
     {
