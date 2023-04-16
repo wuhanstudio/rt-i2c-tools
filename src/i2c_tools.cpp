@@ -20,7 +20,28 @@ static void i2c(int argc,char *argv[])
 
         if(!strcmp(argv[ARG_CMD_POS], "scan"))
         {
-            i2c_scan();
+            rt_uint8_t start_addr = 0x00;
+            rt_uint8_t stop_addr = 0x80;
+        #ifdef I2C_TOOLS_USE_SW_I2C
+            if(argc >= 5)
+            {
+                start_addr = strtonum(argv[4]);
+                if(argc > 5)
+                {
+                    stop_addr = strtonum(argv[5]);
+                }
+            }
+        #else
+            if(argc >= 4)
+            {
+                start_addr = strtonum(argv[3]);
+                if(argc > 4)
+                {
+                    stop_addr = strtonum(argv[4]);
+                }
+            }
+        #endif
+            i2c_scan(start_addr, stop_addr);
             return;
         }
 

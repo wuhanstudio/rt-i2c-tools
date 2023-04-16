@@ -38,7 +38,7 @@ void i2c_help();
 #endif
 
 int  i2c_probe(char addr);
-void i2c_scan();
+void i2c_scan(rt_uint8_t start_addr, rt_uint8_t stop_addr);
 
 rt_bool_t  i2c_write(char addr, rt_uint8_t* data, int len);
 rt_uint8_t i2c_read(rt_uint8_t addr, rt_uint8_t reg, rt_uint8_t* buffer, rt_uint8_t len);

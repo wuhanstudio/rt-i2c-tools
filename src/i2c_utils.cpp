@@ -27,11 +27,11 @@ void i2c_help()
     rt_kprintf("i2c tools help:\n");
     rt_kprintf("---------------\n");
 #ifdef I2C_TOOLS_USE_SW_I2C
-    rt_kprintf("i2c scan  pin_sda pin_scl\n");
+    rt_kprintf("i2c scan  pin_sda pin_scl [start addr [stop addr]]\n");
     rt_kprintf("i2c read  pin_sda pin_scl address  register  [len=1]\n");
     rt_kprintf("i2c write pin_sda pin_scl address [register] data_0 data_1 ...\n\n");
 #else
-    rt_kprintf("i2c scan  bus_name\n");
+    rt_kprintf("i2c scan  bus_name [start addr [stop addr]]\n");
     rt_kprintf("i2c read  bus_name address  register  [len=1]\n");
     rt_kprintf("i2c write bus_name address [register] data_0 data_1 ...\n\n");
 #endif
@@ -129,25 +129,30 @@ rt_uint8_t i2c_read(rt_uint8_t addr, rt_uint8_t reg, rt_uint8_t* buffer, rt_uint
     #endif
 }
 
-void i2c_scan()
+void i2c_scan(rt_uint8_t start_addr, rt_uint8_t stop_addr)
 {
-    rt_kprintf("     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f\n");
-    for(unsigned char i=0; i<8; i++)
+    rt_kputs("    00 01  2 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F");
+    rt_uint8_t pos = start_addr & 0xF;
+    for(; pos < stop_addr; pos++)
     {
-        rt_kprintf("%d0: ", i);
-        for(unsigned char j=0; j<16; j++)
+        if((pos & 0xF) == 0)
         {
-            char addr = i*16+j;
-            if( i2c_probe(addr) == 1)
-            {
-                rt_kprintf("%02X", addr);
-            }
-            else
-            {
-                rt_kprintf("--");
-            }
-            rt_kprintf(" ");
+            rt_kprintf("\n%02X: ", pos);
         }
-        rt_kprintf("\n");
+        if(pos < start_addr)
+        {
+            rt_kputs("   ");
+            continue;
+        }
+        if( i2c_probe(pos) == 1)
+        {
+            rt_kprintf("%02X", pos);
+        }
+        else
+        {
+            rt_kputs("--");
+        }
+        rt_kputs(" ");
     }
+    rt_kputs("\n");
 }
