@@ -20,27 +20,43 @@ static void i2c(int argc,char *argv[])
 
         if(!strcmp(argv[ARG_CMD_POS], "scan"))
         {
-            rt_uint8_t start_addr = 0x00;
-            rt_uint8_t stop_addr = 0x80;
+            rt_uint32_t start_addr = 0x00;
+            rt_uint32_t stop_addr  = 0x80;
         #ifdef I2C_TOOLS_USE_SW_I2C
             if(argc >= 5)
             {
-                start_addr = strtonum(argv[4]);
+                if (sscanf(argv[4], "%x", &start_addr) != 1) {
+                    rt_kprintf("[i2c] Invalid start address: %s\n", argv[4]);
+                    return;
+                }
                 if(argc > 5)
                 {
-                    stop_addr = strtonum(argv[5]);
+                    if (sscanf(argv[5], "%x", &stop_addr) != 1) {
+                        rt_kprintf("[i2c] Invalid stop address: %s\n", argv[5]);
+                        return;
+                    }
                 }
             }
         #else
             if(argc >= 4)
             {
-                start_addr = strtonum(argv[3]);
+                if (sscanf(argv[3], "%x", &start_addr) != 1) {
+                    rt_kprintf("[i2c] Invalid start address: %s\n", argv[3]);
+                    return;
+                }
                 if(argc > 4)
                 {
-                    stop_addr = strtonum(argv[4]);
+                    if (sscanf(argv[4], "%x", &stop_addr) != 1) {
+                        rt_kprintf("[i2c] Invalid stop address: %s\n", argv[4]);
+                        return;
+                    }
                 }
             }
         #endif
+            if (start_addr >= stop_addr) {
+                rt_kprintf("[i2c] The stop address should be higher than the start address\n");
+                return;
+            }
             i2c_scan(start_addr, stop_addr);
             return;
         }
