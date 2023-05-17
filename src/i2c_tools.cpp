@@ -53,6 +53,10 @@ static void i2c(int argc,char *argv[])
                 }
             }
         #endif
+            if (start_addr >= 0x80 || stop_addr > 0x80) {
+                rt_kprintf("[i2c] The addresses only range from 0x00 to 0x7F\n");
+                return;
+            }
             if (start_addr >= stop_addr) {
                 rt_kprintf("[i2c] The stop address should be higher than the start address\n");
                 return;
